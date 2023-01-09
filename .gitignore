@@ -1,0 +1,6 @@
+.idea
+.vscode
+venv
+**/*.pyc
+oddam_w_dobre_rece
+
