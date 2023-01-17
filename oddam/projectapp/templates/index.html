@@ -6,7 +6,7 @@
     <header class="header--main-page">
       <nav class="container container--70">
         <ul class="nav--actions">
-          <li><a href="{% url 'projectapp:login' %}"class="btn btn--small btn--without-border">Zaloguj</a></li>
+          <li><a href="{% url 'projectapp:login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
           <li><a href="{% url 'projectapp:register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
         </ul>
 
@@ -99,10 +99,10 @@
         <p>W naszej bazie znajdziesz listę zweryfikowanych Fundacji, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.</p>
 
         <ul class="help--slides-items">
-          {% for foundation in foundations %}
+          {% for foundation in foundations_page %}
           <li>
             <div class="col">
-              <div class="title">Fundacja {{foundation.name}}</div>
+              <div class="title">Fundacja: "{{foundation.name}}"</div>
               <div class="subtitle">Cel i misja: {{foundation.description}}</div>
             </div>
 
@@ -112,13 +112,17 @@
 
 
         </ul>
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
+          {% for page in foundations_page.paginator.page_range %}
+          {% if page == foundations_page.number %}
+          <li><a href="{% url 'projectapp:landingpage' %}?slide1={{page}}" class="btn btn--small btn--without-border active" data-page="{{page}}">{{page}}</a></li>
+          {% else %}
+          <li><a href="{% url 'projectapp:landingpage' %}?slide1={{page}}" class="btn btn--small btn--without-border" data-page="{{page}}">{{page}}</a></li>
+          {% endif %}
+          {% endfor %}
+
         </ul>
-        -->
+
       </div>
 
 
@@ -129,10 +133,10 @@
           quos suscipit corporis!
         </p>
         <ul class="help--slides-items">
-          {% for organization in non_gov_organizations %}
+          {% for organization in no_gov %}
           <li>
             <div class="col">
-              <div class="title">Fundacja {{organization.name}}</div>
+              <div class="title">Organizacja: "{{organization.name}}"</div>
               <div class="subtitle">Cel i misja: {{organization.description}}</div>
             </div>
 
@@ -141,6 +145,16 @@
           {% endfor %}
         </ul>
 
+        <ul class="help--slides-pagination">
+          {% for page in no_gov.paginator.page_range %}
+          {% if page == no_gov.number %}
+          <li><a href="{% url 'projectapp:landingpage' %}?slide2={{page}}" class="btn btn--small btn--without-border active" data-page="{{page}}">{{page}}</a></li>
+          {% else %}
+          <li><a href="{% url 'projectapp:landingpage' %}?slide2={{page}}" class="btn btn--small btn--without-border" data-page="{{page}}">{{page}}</a></li>
+          {% endif %}
+          {% endfor %}
+
+        </ul>
         <!-- Pagination
         <ul class="help--slides-pagination">
           <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
@@ -156,10 +170,10 @@
       <div class="help--slides" data-id="3">
         <p>Lorem ipsum dolor sit amet, his ocurreret persequeris ea, ad utinam laudem duo. Verterem adipisci partiendo eos ne, ea his reque quaeque recteque, ne quo lobortis intellegam.</p>
         <ul class="help--slides-items">
-          {% for collection in local_collections %}
+          {% for collection in collections_page %}
           <li>
             <div class="col">
-              <div class="title">Fundacja {{collection.name}}</div>
+              <div class="title">Zbiórka: "{{collection.name}}"</div>
               <div class="subtitle">Cel i misja: {{collection.description}}</div>
             </div>
 
@@ -168,12 +182,16 @@
           {% endfor %}
         </ul>
 
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
+          {% for page in collections_page.paginator.page_range %}
+          {% if page == collections_page.number %}
+          <li><a href="{% url 'projectapp:landingpage' %}?slide3={{page}}" class="btn btn--small btn--without-border active" data-page="{{page}}">{{page}}</a></li>
+          {% else %}
+          <li><a href="{% url 'projectapp:landingpage' %}?slide3={{page}}" class="btn btn--small btn--without-border" data-page="{{page}}">{{page}}</a></li>
+          {% endif %}
+          {% endfor %}
+
         </ul>
-        -->
       </div>
     </section>
 
