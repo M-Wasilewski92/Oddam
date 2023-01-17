@@ -8,6 +8,9 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Institution(models.Model):
     """
@@ -28,6 +31,9 @@ class Institution(models.Model):
     )
     categories = models.ManyToManyField(Category)
 
+    def __str__(self):
+        return self.name
+
 
 class Donation(models.Model):
     """
@@ -45,3 +51,6 @@ class Donation(models.Model):
     pick_up_time = models.DateTimeField(blank=True)
     pick_up_comment = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.pick_up_comment
