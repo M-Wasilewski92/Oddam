@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django.views import View
+from django.shortcuts import render, redirect
+from django.views import View, generic
 from . import models
 from django.core.paginator import Paginator
-
+from .forms import CustomUserCreationForm
+from django.contrib import messages
+from django.forms import ValidationError
 
 # Create your views here.
 class LandingPage(View):
@@ -42,7 +44,6 @@ class LandingPage(View):
         return render(request, './index.html', context=context)
 
 
-
 class AddDonation(View):
     def get(self, request):
         return render(request, './form.html')
@@ -54,5 +55,23 @@ class Login(View):
 
 
 class Register(View):
+
     def get(self, request):
-        return render(request, './register.html')
+        form = CustomUserCreationForm()
+        context = {
+            'form': form
+        }
+        return render(request, './register.html', context)
+
+    def post(self, request):
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Rejestracja zakończona")
+            return redirect('projectapp:login')
+
+        else:
+            messages.error(request, 'Błąd w formularzu')
+            print('SHIT')
+            raise ValidationError("Hasła muszą pasować do siebie")
+            return redirect('projectapp:register')
