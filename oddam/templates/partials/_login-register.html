@@ -1,0 +1,20 @@
+{% if user.is_authenticated %}
+    <ul class="nav--actions">
+      <li class="logged-user">
+         Witaj {{user}}|
+        <ul class="dropdown">
+          <li><a href="#">Profil</a></li>
+          <li><a href="#">Ustawienia</a></li>
+          <li><a href="{% url 'logout' %}">Wyloguj</a></li>
+
+        </ul>
+
+      </li>
+
+    </ul>
+    {% else %}
+          <ul class="nav--actions">
+          <li><a href="{% url 'projectapp:login' %}">Zaloguj</a></li>
+          <li class="highlighted"><a href="{% url 'projectapp:register' %}">Załóż konto</a></li>
+        </ul>
+         {% endif %}
