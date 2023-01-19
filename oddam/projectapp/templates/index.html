@@ -187,7 +187,7 @@
           {% if page == collections_page.number %}
           <li><a href="{% url 'projectapp:landingpage' %}?slide3={{page}}" class="btn btn--small btn--without-border active" data-page="{{page}}">{{page}}</a></li>
           {% else %}
-          <li><a href="?slide3={{page}}" class="btn btn--small btn--without-border" data-page="{{page}}">{{page}}</a></li>
+          <li><a href="?slide3={{page}}#help" class=" btn--small btn--without-border" data-page="{{page}}">{{page}}</a></li>
           {% endif %}
           {% endfor %}
 
