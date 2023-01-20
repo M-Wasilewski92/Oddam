@@ -1,10 +1,13 @@
+from django.contrib.auth import authenticate, login ,logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import View, generic
 from . import models
 from django.core.paginator import Paginator
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomLoginForm
 from django.contrib import messages
-from django.forms import ValidationError
+
+
 
 # Create your views here.
 class LandingPage(View):
@@ -51,7 +54,28 @@ class AddDonation(View):
 
 class Login(View):
     def get(self, request):
-        return render(request, './login.html')
+        form = CustomLoginForm()
+        context = {
+            'login_form': form
+        }
+        return render(request, './login.html', context)
+
+    def post(self, request):
+        form = CustomLoginForm(request, data=request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Zostałeś zalogowany jako {email}.")
+                return redirect('projectapp:landingpage')
+            else:
+                messages.info(request, 'Nie ma takiego użytkownika')
+                return redirect('projectapp:register')
+        else:
+            messages.error(request, 'Błąd w formularzu')
+            return redirect('projectapp:register')
 
 
 class Register(View):
@@ -71,7 +95,4 @@ class Register(View):
             return redirect('projectapp:login')
 
         else:
-            messages.error(request, 'Błąd w formularzu')
-            print('SHIT')
-            raise ValidationError("Hasła muszą pasować do siebie")
             return redirect('projectapp:register')

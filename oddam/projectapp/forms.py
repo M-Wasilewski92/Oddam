@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.contrib.auth.models import User
 
 
@@ -16,7 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
                                                             'placeholder': 'Email'}), required=True)
     password1 = forms.CharField(label='Hasło', strip=False, widget=forms.PasswordInput(attrs=
                                                                                        {"autocomplete": "new-password",
-                                                                                       'class': 'form-group',
+                                                                                        'class': 'form-group',
                                                                                         'placeholder': 'Hasło'}))
 
     password2 = forms.CharField(label='Powtórz hasło', strip=False,
@@ -24,7 +24,6 @@ class CustomUserCreationForm(UserCreationForm):
                                                            {"autocomplete": "new-password",
                                                             'class': 'form-group',
                                                             'placeholder': 'Powtórz hasło'}))
-
 
     class Meta:
         model = User
@@ -39,3 +38,14 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class CustomLoginForm(AuthenticationForm):
+    username = UsernameField(widget=forms.TextInput(attrs={"autofocus": True, 'placeholder': 'Email'}))
+    password = forms.CharField(
+        label=("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password", 'placeholder': 'Hasło'}),
+    )
+
+

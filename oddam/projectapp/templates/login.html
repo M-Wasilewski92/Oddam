@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block container %}
+{% block title %}Logowanie{% endblock %}
 <header>
       <nav class="container container--70">
-
+{% include './partials/_login-register.html' %}
 {% include './partials/_header.html' %}
 
        </nav>
 </header>
     <section class="login-page">
       <h2>Zaloguj się</h2>
-      <form>
-        <div class="form-group">
-          <input type="email" name="email" placeholder="Email" />
-        </div>
-        <div class="form-group">
-          <input type="password" name="password" placeholder="Hasło" />
-          <a href="#" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
-        </div>
+      <form method="POST">
+          {% csrf_token %}
+
+          {% for field in login_form %}
+          <div class="form-group">
+            {{field}}
+              {% if field.name == 'password' %}
+              <a href="#" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
+              {% endif %}
+          </div>
+          {% endfor %}
 
         <div class="form-group form-group--buttons">
           <a href="{% url 'projectapp:register' %}" class="btn btn--without-border">Załóż konto</a>
@@ -27,7 +31,7 @@
     </section>
 
     <footer>
-        <div class="contact">
+        <div id="contact" class="contact">
           <h2>Skontaktuj się z nami</h2>
           <h3>Formularz kontaktowy</h3>
           <form>
