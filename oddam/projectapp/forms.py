@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from django.contrib.auth.models import User
 
 
-
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(label='Imię', min_length=3, max_length=150,
                                  widget=forms.TextInput(attrs=
@@ -50,3 +49,14 @@ class CustomLoginForm(AuthenticationForm):
     )
 
 
+class DonationCreationForm(forms.Form):
+    quantity = forms.IntegerField()
+    address = forms.CharField(max_length=50)
+    phone_number = forms.CharField(max_length=15)
+    city = forms.CharField(max_length=30)
+    zip_code = forms.CharField(max_length=10)
+    pick_up_date = forms.DateField(widget=forms.DateInput)
+    pick_up_time = forms.DateTimeField()
+    pick_up_comment = forms.CharField(widget=forms.Textarea)
+    institution_id = forms.IntegerField()
+    category_ids = forms.CharField(max_length=5)
