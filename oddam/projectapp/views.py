@@ -1,12 +1,13 @@
-from django.contrib.auth import authenticate, login ,logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views import View, generic
+from django.views import View
 from . import models
 from django.core.paginator import Paginator
 from .forms import CustomUserCreationForm, CustomLoginForm
 from django.contrib import messages
 
+from .models import Category, Institution
 
 
 # Create your views here.
@@ -47,9 +48,17 @@ class LandingPage(View):
         return render(request, './index.html', context=context)
 
 
-class AddDonation(View):
+class AddDonation(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, './form.html')
+        category = Category.objects.all()
+        institutions = Institution.objects.all()
+
+        context = {
+            'category': category,
+            'institutions': institutions,
+        }
+
+        return render(request, './form.html', context)
 
 
 class Login(View):
