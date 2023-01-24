@@ -1,13 +1,14 @@
-from django.contrib.auth import authenticate, login ,logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.views import View, generic
+from django.views import View
 from . import models
 from django.core.paginator import Paginator
-from .forms import CustomUserCreationForm, CustomLoginForm
+from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm
 from django.contrib import messages
-
-
+from .models import Category, Institution, Donation
+import datetime
 
 # Create your views here.
 class LandingPage(View):
@@ -47,9 +48,43 @@ class LandingPage(View):
         return render(request, './index.html', context=context)
 
 
-class AddDonation(View):
+class AddDonation(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, './form.html')
+        category = Category.objects.all()
+        institutions = Institution.objects.all()
+        form = DonationCreationForm()
+        context = {
+            'category': category,
+            'institutions': institutions,
+            'form': form,
+        }
+
+        return render(request, './form.html', context)
+
+    def post(self, request):
+        form = DonationCreationForm(request.POST)
+        user_onj = request.user
+        if form.is_valid():
+            institution = Institution.objects.get(id=form.cleaned_data['institution_id'])
+            categorys = get_category_objs(form.cleaned_data['category_ids'])
+            new_donation = Donation()
+            new_donation.quantity = form.cleaned_data['quantity']
+            new_donation.address = form.cleaned_data['address']
+            new_donation.phone_number = form.cleaned_data['phone_number']
+            new_donation.city = form.cleaned_data['city']
+            new_donation.zip_code = form.cleaned_data['zip_code']
+            new_donation.pick_up_date = form.cleaned_data['pick_up_date']
+            new_donation.pick_up_time = str(form.cleaned_data['pick_up_time'])
+            new_donation.pick_up_comment = form.cleaned_data['pick_up_comment']
+            new_donation.institution = institution
+            new_donation.user = user_onj
+            new_donation.save()
+            for id in categorys:
+                new_donation.categories.add(id)
+            new_donation.save()
+            return redirect('projectapp:donation')
+        print(form.errors.as_data())
+        return redirect('projectapp:add')
 
 
 class Login(View):
@@ -96,3 +131,17 @@ class Register(View):
 
         else:
             return redirect('projectapp:register')
+
+class SucessDonation(View):
+
+    def get(self, request):
+        return render(request, './form-confirmation.html')
+
+
+def get_category_objs(cat_ids):
+    """Recives string with ids of category objects"""
+    cat_objs = []
+    cat_ids = cat_ids.split(" ")
+    for id in cat_ids:
+        cat_objs.append(int(id))
+    return cat_objs

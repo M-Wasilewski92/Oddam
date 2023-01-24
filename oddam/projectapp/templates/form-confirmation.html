@@ -2,8 +2,9 @@
 {% load static %}
 {% block title %}Potwierdzenie{% endblock %}
 {% block container %}
-
-    {% include './partials/_login-register.html' %}
+<header class="header--form-page">
+    <nav class="container container--70">
+        {% include './partials/_login-register.html' %}
 
         <ul>
           <li><a href="{% url 'projectapp:landingpage' %}" class="btn btn--without-border active">Start</a></li>
