@@ -56,7 +56,7 @@ class DonationCreationForm(forms.Form):
     city = forms.CharField(max_length=30)
     zip_code = forms.CharField(max_length=10)
     pick_up_date = forms.DateField(widget=forms.DateInput)
-    pick_up_time = forms.DateTimeField()
+    pick_up_time = forms.TimeField()
     pick_up_comment = forms.CharField(widget=forms.Textarea)
     institution_id = forms.IntegerField()
     category_ids = forms.CharField(max_length=5)
