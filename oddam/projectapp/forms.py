@@ -26,7 +26,7 @@ class CustomUserCreationForm(UserCreationForm):
                                                             'placeholder': 'Powtórz hasło'}))
 
     class Meta:
-        model = User
+        model = User()
         fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
 
     def save(self, commit=True):
