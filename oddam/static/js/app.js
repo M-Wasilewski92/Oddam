@@ -327,7 +327,7 @@ formButtonThree.addEventListener('click', function (e) {
             // Bags
             const newSpanBags = document.createElement('span')
             newSpanBags.setAttribute('class', "summary--text")
-            newSpanBags.innerText = bagsNumber.value
+            newSpanBags.innerText = `${bagsNumber.value} worków 60L`
             bagsSummary.appendChild(newSpanBags)
         }
 
@@ -336,17 +336,6 @@ formButtonThree.addEventListener('click', function (e) {
 
 })
 
-// function getInstitutionId () {
-//         institutionOptions.forEach( institution => {
-//             if (institution.children[0].checked) {
-//                 // Institution
-//                 let inst_id = institution.children[0].value
-//                 return inst_id
-//
-//             }
-//         })
-//     }
-
 const formBackButtonThree = document.querySelector('#back-btn-3')
 formBackButtonThree.addEventListener('click', function (e) {
     institutionOptions.forEach(institution => {
@@ -354,8 +343,6 @@ formBackButtonThree.addEventListener('click', function (e) {
         }
     )
 })
-
-
 // Form step 4
 const formButtonFour = document.querySelector('#btn-slide-4')
 // Get data from inputs and show them in summary
