@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm
 from django.contrib import messages
 from .models import Category, Institution, Donation
-import datetime
+from datetime import date
 
 
 # Create your views here.
@@ -145,7 +145,13 @@ class SuccessDonation(View):
 class UserProfile(LoginRequiredMixin, View):
 
     def get(self, request):
-        return render(request, './user-page.html')
+        user_donations = Donation.objects.filter(user=request.user).order_by('pick_up_date')
+        today = date.today()
+        context = {
+            'user_donations': user_donations,
+            'today': today,
+        }
+        return render(request, './user-page.html', context)
 
 
 def get_category_objs(cat_ids):

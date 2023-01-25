@@ -269,7 +269,8 @@ const category = document.querySelectorAll('.category-input')
 const categoryChoice = []
 let categoryId = ''
 const formButtonOne = document.querySelector('#btn-slide-1')
-formButtonOne.addEventListener('click', function (e) {
+if (formButtonOne) {
+    formButtonOne.addEventListener('click', function (e) {
     category.forEach(category => {
         if (category.children[0].checked) {
             categoryChoice.push(category.children[0].value)
@@ -414,6 +415,7 @@ formBackButtonFive.addEventListener('click', function (e) {
     pickUpDetails.textContent = ''
 
 })
+}
 
 
 
