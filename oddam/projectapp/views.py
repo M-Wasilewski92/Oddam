@@ -79,9 +79,11 @@ class AddDonation(LoginRequiredMixin, View):
             new_donation.institution = institution
             new_donation.user = user_onj
             new_donation.save()
+            donation = Donation.objects.latest('id')
             for id in categorys:
-                new_donation.categories.add(id)
-            new_donation.save()
+                print(id)
+                donation.categories.add(id)
+                donation.save()
             return redirect('projectapp:donation')
         print(form.errors.as_data())
         return redirect('projectapp:add')
@@ -141,7 +143,7 @@ class SucessDonation(View):
 def get_category_objs(cat_ids):
     """Recives string with ids of category objects"""
     cat_objs = []
-    cat_ids = cat_ids.split(" ")
-    for id in cat_ids:
+    separated = list(cat_ids)
+    for id in separated:
         cat_objs.append(int(id))
     return cat_objs
