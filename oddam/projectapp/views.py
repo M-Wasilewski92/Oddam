@@ -10,6 +10,7 @@ from django.contrib import messages
 from .models import Category, Institution, Donation
 import datetime
 
+
 # Create your views here.
 class LandingPage(View):
     def get(self, request):
@@ -134,10 +135,17 @@ class Register(View):
         else:
             return redirect('projectapp:register')
 
-class SucessDonation(View):
+
+class SuccessDonation(View):
 
     def get(self, request):
         return render(request, './form-confirmation.html')
+
+
+class UserProfile(LoginRequiredMixin, View):
+
+    def get(self, request):
+        return render(request, './user-page.html')
 
 
 def get_category_objs(cat_ids):

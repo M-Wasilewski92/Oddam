@@ -1,0 +1,27 @@
+{% extends 'base.html' %},
+{% load static %}
+{% block title %}Profil{% endblock %}
+{% block container %}
+<header class="header--form-page">
+    <nav class="container container--70">
+{% include './partials/_login-register.html' %}
+{% include './partials/_header.html' %}
+    </nav>
+
+
+<section class="about-us">
+    <div class=about-us--text">
+        <h2>Profil Użytkownika:<br> {{ user.get_full_name }}</h2>
+        <h1>Imię: {{ user.first_name }} </h1>
+        <h1>Nazwisko: {{ user.last_name }} </h1>
+        <h1>Adres E-mail:  {{ user.email }}</h1>
+
+    </div>
+
+</section>
+
+</header>
+
+{% include './partials/_footer.html' %}
+
+{% endblock %}
