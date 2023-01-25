@@ -60,3 +60,9 @@ class DonationCreationForm(forms.Form):
     pick_up_comment = forms.CharField(widget=forms.Textarea)
     institution_id = forms.IntegerField()
     category_ids = forms.CharField(max_length=5)
+
+
+class IsTakenForm(forms.Form):
+    is_taken = forms.BooleanField(initial=True, required=False)
+
+

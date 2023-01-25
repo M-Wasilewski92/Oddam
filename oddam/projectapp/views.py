@@ -5,14 +5,15 @@ from django.shortcuts import render, redirect
 from django.views import View
 from . import models
 from django.core.paginator import Paginator
-from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm
+from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm, IsTakenForm
 from django.contrib import messages
 from .models import Category, Institution, Donation
-from datetime import date
+from datetime import date, datetime
 
 
 # Create your views here.
 class LandingPage(View):
+
     def get(self, request):
         all_donations = models.Donation.objects.all()
         total_bags = 0
@@ -34,7 +35,6 @@ class LandingPage(View):
         local_collections = models.Institution.objects.filter(type='Zbiórka Lokalna')
         paginate_collections = Paginator(local_collections, 5)
         page_for_collections = request.GET.get('slide3')
-        print(page_for_collections)
         collections_page = paginate_collections.get_page(page_for_collections)
 
         context = {
@@ -82,7 +82,6 @@ class AddDonation(LoginRequiredMixin, View):
             new_donation.save()
             donation = Donation.objects.latest('id')
             for id in categorys:
-                print(id)
                 donation.categories.add(id)
                 donation.save()
             return redirect('projectapp:donation')
@@ -146,12 +145,27 @@ class UserProfile(LoginRequiredMixin, View):
 
     def get(self, request):
         user_donations = Donation.objects.filter(user=request.user).order_by('pick_up_date')
-        today = date.today()
+        form = IsTakenForm()
         context = {
             'user_donations': user_donations,
-            'today': today,
+            'form': form,
         }
         return render(request, './user-page.html', context)
+
+    def post(self, request):
+        today = date.today()
+        time_now = datetime.now()
+        time_now = time_now.strftime("%H:%M")
+        form = IsTakenForm(request.POST)
+        if 'don_id' in request.POST:
+            if form.is_valid():
+                donation = Donation.objects.get(id=request.POST['don_id'])
+                donation.is_taken = form.cleaned_data['is_taken']
+                donation.pick_up_date = today
+                donation.pick_up_time = time_now
+                donation.save()
+                return redirect('projectapp:profile')
+        return render(request, './user-page.html')
 
 
 def get_category_objs(cat_ids):

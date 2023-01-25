@@ -22,31 +22,49 @@
     <div class="about-us--text">
         <h2 > Lista Dotacji oczekujących na odbiór: </h2>
             {% for donation in user_donations %}
-            {% if today < donation.pick_up_date %}
-        <div style="border-style: solid;" class="about-us--text">
-            <p>Ilość przekazanych darów:<br>{{ donation.quantity }}
+            {% if donation.is_taken == False %}
+        <div style="border-style: solid;"  class="about-us--text" >
+             <p>Ilość przekazanych darów:<br>{{ donation.quantity }}
              <br>Wsparta Organizacja:<br>{{ donation.institution }}
             <br>Kategorie Daru:<br>{{ donation.categories.all|join:', ' }}
-            <br>Data odbioru daru:<br>{{ donation.pick_up_date }}
-                <br>Godzina odbioru:<br>{{ donation.pick_up_time }}</p>
-        </div>
-            {% endif %}
-            {% endfor %}
+            </p>
 
-        <h2> Lista przekazanych dotacji </h2>
-
-            {% for donation in user_donations %}
-            {% if today > donation.pick_up_date %}
-        <div style="border-style: solid;"  class="about-us--text" >
-            <p>Ilość przekazanych darów:<br>{{ donation.quantity }}</p>
-            <p>Wsparta Organizacja:<br>{{ donation.institution }}</p>
-            <p>Kategorie Daru:<br>{{ donation.categories.all|join:', ' }}</p>
-            <p>Data odbioru daru:<br>{{ donation.pick_up_date }}
-               <br>Godzina odbioru:<br>{{ donation.pick_up_time }}</p>
+            <p>Dotacja nie odebrana:</p>
+            <p>Planowana data odbioru:<br>
+            <br>{{ donation.pick_up_date }}
+                <br>O Godzinie: {{ donation.pick_up_time }}
+            </p>
+            <form method="post"> {% csrf_token %}
+                <p style="display: none">{{form}}</p>
+                <button type="submit" name="don_id" value="{{ donation.pk }}"> Dotacja przekazana </button>
+            </form>
         </div>
             {% endif %}
             {% endfor %}
     </div>
+    <div class="about-us--text">
+        <h2> Zarchiwizowane Dotacje</h2>
+
+            {% for donation in user_donations %}
+            {% if donation.is_taken %}
+        <div style="border-style: solid; color: orange"  class="about-us--text" >
+             <p>Ilość przekazanych darów:<br>{{ donation.quantity }}
+             <br>Wsparta Organizacja:<br>{{ donation.institution }}
+            <br>Kategorie Daru:<br>{{ donation.categories.all|join:', ' }}
+
+
+            <p>Dotacja odebrana:</p>
+            <p>Dnia: {{ donation.pick_up_date }}<br>
+            O godzinie: {{donation.pick_up_time }}</p>
+            <form method="post"> {% csrf_token %}
+                <p>{{form}}</p>
+                <button type="submit" name="don_id" value="{{ donation.pk }}"> Dotacja przekazana </button>
+            </form>
+        </div>
+            {% endif %}
+            {% endfor %}
+    </div>
+
     </section>
 {% include './partials/_footer.html' %}
 

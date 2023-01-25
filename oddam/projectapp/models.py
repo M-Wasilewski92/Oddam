@@ -60,6 +60,7 @@ class Donation(models.Model):
     pick_up_time = models.TimeField(blank=True, verbose_name='Godzina odbioru')
     pick_up_comment = models.TextField(verbose_name='Komentarz')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Użytkownik')
+    is_taken = models.BooleanField(default=False, null=True, verbose_name='Datek przekazany')
 
     class Meta:
         verbose_name = 'dotacja'
