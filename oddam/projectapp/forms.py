@@ -66,3 +66,13 @@ class IsTakenForm(forms.Form):
     is_taken = forms.BooleanField(initial=True, required=False)
 
 
+class FirstNameChangeForm(forms.Form):
+    first_name = forms.CharField(label='Imię', min_length=3, max_length=150,
+                                 widget=forms.TextInput(attrs=
+                                                        {'class': 'form-group',
+                                                         'placeholder': 'Imię'}))
+
+class LastNameChangeForm(forms.Form):
+    last_name = forms.CharField(label='Nazwisko', min_length=3, max_length=150,
+                                widget=forms.TextInput(attrs={'class': 'form-group',
+                                                              'placeholder': 'Nazwisko'}))

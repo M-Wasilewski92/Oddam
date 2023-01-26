@@ -1,11 +1,14 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from . import models
 from django.core.paginator import Paginator
-from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm, IsTakenForm
+from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm, IsTakenForm, \
+     FirstNameChangeForm, LastNameChangeForm
 from django.contrib import messages
 from .models import Category, Institution, Donation
 from datetime import date, datetime
@@ -167,6 +170,33 @@ class UserProfile(LoginRequiredMixin, View):
                 return redirect('projectapp:profile')
         return render(request, './user-page.html')
 
+
+class UserSettings(PasswordChangeView):
+    template_name = './user-settings.html'
+    success_url = reverse_lazy('projectapp:settings')
+    first_name_form = FirstNameChangeForm()
+    last_name_form = LastNameChangeForm()
+    extra_context = {
+        'first_name_form': first_name_form,
+        'last_name_form': last_name_form,
+    }
+
+    def post(self, request, *args, **kwargs):
+        first_name_form = FirstNameChangeForm(self.request.POST)
+        if first_name_form.is_valid():
+            user_new_name = User.objects.get(id=self.request.POST['user_id'])
+            user_new_name.first_name = first_name_form.cleaned_data['first_name']
+            user_new_name.save()
+        last_name_form = LastNameChangeForm(self.request.POST)
+        if last_name_form.is_valid():
+            user_new_last_name = User.objects.get(id=self.request.POST['user_id'])
+            user_new_last_name.last_name = last_name_form.cleaned_data['last_name']
+            user_new_last_name.save()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 def get_category_objs(cat_ids):
     """Recives string with ids of category objects"""
