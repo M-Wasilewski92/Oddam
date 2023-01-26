@@ -130,3 +130,6 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "projectapp:login"
 LOGOUT_REDIRECT_URL = "projectapp:landingpage"
+
+# Emailing settings
+
