@@ -1,0 +1,6 @@
+{% autoescape off %}
+Cześć {{ user.first_name }}
+Potwierdzi twój adres Email.
+W celu zakończenia rejestracji kliknij Link:
+http://{{ domain }}{% url 'projectapp:activate' uidb64=uid token=token %}
+{% endautoescape %}
