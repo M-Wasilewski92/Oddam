@@ -173,7 +173,7 @@ class UserProfile(LoginRequiredMixin, View):
 
 class UserSettings(PasswordChangeView):
     template_name = './user-settings.html'
-    success_url = 'projectapp:settings'
+    success_url = reverse_lazy('projectapp:settings')
     first_name_form = FirstNameChangeForm()
     last_name_form = LastNameChangeForm()
     extra_context = {
