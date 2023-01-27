@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -123,6 +122,7 @@ class Login(View):
                 return redirect('projectapp:register')
         else:
             messages.error(request, 'Błąd w formularzu')
+            print(form.errors.as_data())
             return redirect('projectapp:register')
 
 
@@ -157,6 +157,7 @@ class Register(View):
             return redirect('projectapp:login')
         else:
             return redirect('projectapp:register')
+
 
 def activate(request, uidb64, token):
     """This function will check token, if it is valid then user will be active."""
@@ -246,5 +247,3 @@ def get_category_objs(cat_ids):
     for id in separated:
         cat_objs.append(int(id))
     return cat_objs
-
-

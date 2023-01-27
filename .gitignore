@@ -5,8 +5,8 @@ venv
 oddam_w_dobre_rece
 oddam/projectapp/migrations
 Hasło do Maila
-static/css
-static/images
-static/scss
+oddam/static/css
+oddam/static/images
+oddam/static/scss
 
-env/.env
+oddam/env/.env

@@ -135,4 +135,13 @@ LOGIN_URL = "projectapp:login"
 LOGOUT_REDIRECT_URL = "projectapp:landingpage"
 
 # Emailing settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_FROM = os.environ.get('EMAIL_FROM')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+PASSWORD_RESET_TIMEOUT = 14400
