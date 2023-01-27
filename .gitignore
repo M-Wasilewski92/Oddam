@@ -8,3 +8,5 @@ Hasło do Maila
 static/css
 static/images
 static/scss
+
+env/.env
