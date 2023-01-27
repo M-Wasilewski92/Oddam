@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -16,7 +19,7 @@ from .forms import CustomUserCreationForm, CustomLoginForm, DonationCreationForm
 from django.contrib import messages
 from .models import Category, Institution, Donation
 from datetime import date, datetime
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail, BadHeaderError
 
 from .tokens import account_activation_token
 
@@ -143,7 +146,7 @@ class Register(View):
             user.save()
             current_site = get_current_site(request)
             mail_subject = "Aktywacja Konta"
-            message = render_to_string('acc_activate_email.html', {
+            message = render_to_string('email/acc_activate_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -238,6 +241,46 @@ class UserSettings(PasswordChangeView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+class PasswordResetRequest(View):
+
+    def get(self, request):
+        password_reset_form = PasswordResetForm()
+        context = {
+            'form': password_reset_form,
+        }
+        return render(request, "./password_reset.html", context=context)
+
+    def post(self, request):
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            try:
+                associated_user = User.objects.get(email=data)
+            except User.DoesNotExist:
+                return render(request, 'password_reset_no_user.html')
+            if associated_user:
+                associated_user = User.objects.get(email=data)
+                current_site = get_current_site(request)
+                mail_subject = "Prośba o Reset hasła"
+                message = render_to_string('email/password_reset_email.html', {
+                    'email': associated_user.email,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                    'user': associated_user,
+                    'token': default_token_generator.make_token(associated_user),
+                    'protocl': 'http',
+                })
+                try:
+                    send_mail(subject=mail_subject,
+                              message=message,
+                              from_email='Mwasilewski92@gmail.com',
+                              recipient_list=[associated_user.email],
+                              fail_silently=False)
+                except BadHeaderError:
+                    return HttpResponse("Zły Header? ")
+                return redirect("/password_reset/done")
 
 
 def get_category_objs(cat_ids):

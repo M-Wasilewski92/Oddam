@@ -19,7 +19,7 @@
         <div class="form-group">
             {{field}}
             {% if field.name == 'password' %}
-            <a href="#" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
+            <a href="{% url 'projectapp:password_reset' %}" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
             {% endif %}
         </div>
         {% endfor %}
