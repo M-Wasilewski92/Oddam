@@ -4,59 +4,59 @@
 {% block container %}
 
 <header>
-      <nav class="container container--70">
-{% include './partials/_login-register.html' %}
-{% include './partials/_header.html' %}
+    <nav class="container container--70">
+        {% include './partials/_login-register.html' %}
+        {% include './partials/_header.html' %}
 
-       </nav>
+    </nav>
 </header>
-    <section class="login-page">
-      <h2>Zaloguj się</h2>
-      <form method="POST">
-          {% csrf_token %}
+<section class="login-page">
+    <h2>Zaloguj się</h2>
+    <form method="POST">
+        {% csrf_token %}
 
-          {% for field in login_form %}
-          <div class="form-group">
+        {% for field in login_form %}
+        <div class="form-group">
             {{field}}
-              {% if field.name == 'password' %}
-              <a href="#" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
-              {% endif %}
-          </div>
-          {% endfor %}
+            {% if field.name == 'password' %}
+            <a href="#" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
+            {% endif %}
+        </div>
+        {% endfor %}
 
         <div class="form-group form-group--buttons">
-          <a href="{% url 'projectapp:register' %}" class="btn btn--without-border">Załóż konto</a>
-          <button class="btn" type="submit">Zaloguj się</button>
+            <a href="{% url 'projectapp:register' %}" class="btn btn--without-border">Załóż konto</a>
+            <button class="btn" type="submit">Zaloguj się</button>
         </div>
-      </form>
-    </section>
+    </form>
+</section>
 
-    <footer>
-        <div id="contact" class="contact">
-          <h2>Skontaktuj się z nami</h2>
-          <h3>Formularz kontaktowy</h3>
-          <form>
+<footer>
+    <div id="contact" class="contact">
+        <h2>Skontaktuj się z nami</h2>
+        <h3>Formularz kontaktowy</h3>
+        <form>
             <div class="form-group form-group--50">
-              <input type="text" name="name" placeholder="Imię" />
+                <input type="text" name="name" placeholder="Imię"/>
             </div>
             <div class="form-group form-group--50">
-              <input type="text" name="surname" placeholder="Nazwisko" />
+                <input type="text" name="surname" placeholder="Nazwisko"/>
             </div>
 
             <div class="form-group">
-              <textarea name="message" placeholder="Wiadomość" rows="1"></textarea>
+                <textarea name="message" placeholder="Wiadomość" rows="1"></textarea>
             </div>
 
             <button class="btn" type="submit">Wyślij</button>
-          </form>
-        </div>
-        <div class="bottom-line">
-          <span class="bottom-line--copy">Copyright &copy; 2018</span>
-          <div class="bottom-line--icons">
+        </form>
+    </div>
+    <div class="bottom-line">
+        <span class="bottom-line--copy">Copyright &copy; 2018</span>
+        <div class="bottom-line--icons">
             <a href="#" class="btn btn--small"><img src="images/icon-facebook.svg"/></a>
             <a href="#" class="btn btn--small"><img src="images/icon-instagram.svg"/></a>
-          </div>
         </div>
-      </footer>
-<script src="./static/js/app.js"></script>
+    </div>
+</footer>
+
 {% endblock %}
