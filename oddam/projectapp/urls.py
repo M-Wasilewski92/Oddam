@@ -13,6 +13,7 @@ urlpatterns = [
     path('donation/', views.SuccessDonation.as_view(), name='donation'),
     path('profile/', views.UserProfile.as_view(), name='profile'),
     path('settings/', views.UserSettings.as_view(), name='settings'),
+    path('password_reset/', views.PasswordResetRequest.as_view(), name='password_reset'),
 
 
 ]

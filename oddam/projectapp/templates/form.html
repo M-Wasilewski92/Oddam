@@ -102,56 +102,55 @@
             </div>
 
 
-                <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
-                <!--              <label>-->
-                <!--                <input-->
-                <!--                  type="checkbox"-->
-                <!--                  name="categories"-->
-                <!--                  value="clothes-to-use"-->
-                <!--                />-->
-                <!--                <span class="checkbox"></span>-->
-                <!--                <span class="description"-->
-                <!--                  >ubrania, które nadają się do ponownego użycia</span-->
-                <!--                >-->
-                <!--              </label>-->
-                <!--            </div>-->
+            <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
+            <!--              <label>-->
+            <!--                <input-->
+            <!--                  type="checkbox"-->
+            <!--                  name="categories"-->
+            <!--                  value="clothes-to-use"-->
+            <!--                />-->
+            <!--                <span class="checkbox"></span>-->
+            <!--                <span class="description"-->
+            <!--                  >ubrania, które nadają się do ponownego użycia</span-->
+            <!--                >-->
+            <!--              </label>-->
+            <!--            </div>-->
 
-                <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
-                <!--              <label>-->
-                <!--                <input-->
-                <!--                  type="checkbox"-->
-                <!--                  name="categories"-->
-                <!--                  value="clothes-useless"-->
-                <!--                />-->
-                <!--                <span class="checkbox"></span>-->
-                <!--                <span class="description">ubrania, do wyrzucenia</span>-->
-                <!--              </label>-->
-                <!--            </div>-->
+            <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
+            <!--              <label>-->
+            <!--                <input-->
+            <!--                  type="checkbox"-->
+            <!--                  name="categories"-->
+            <!--                  value="clothes-useless"-->
+            <!--                />-->
+            <!--                <span class="checkbox"></span>-->
+            <!--                <span class="description">ubrania, do wyrzucenia</span>-->
+            <!--              </label>-->
+            <!--            </div>-->
 
-                <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
-                <!--              <label>-->
-                <!--                <input type="checkbox" name="categories" value="toys" />-->
-                <!--                <span class="checkbox"></span>-->
-                <!--                <span class="description">zabawki</span>-->
-                <!--              </label>-->
-                <!--            </div>-->
+            <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
+            <!--              <label>-->
+            <!--                <input type="checkbox" name="categories" value="toys" />-->
+            <!--                <span class="checkbox"></span>-->
+            <!--                <span class="description">zabawki</span>-->
+            <!--              </label>-->
+            <!--            </div>-->
 
-                <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
-                <!--              <label>-->
-                <!--                <input type="checkbox" name="categories" value="books" />-->
-                <!--                <span class="checkbox"></span>-->
-                <!--                <span class="description">książki</span>-->
-                <!--              </label>-->
-                <!--            </div>-->
+            <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
+            <!--              <label>-->
+            <!--                <input type="checkbox" name="categories" value="books" />-->
+            <!--                <span class="checkbox"></span>-->
+            <!--                <span class="description">książki</span>-->
+            <!--              </label>-->
+            <!--            </div>-->
 
-                <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
-                <!--              <label>-->
-                <!--                <input type="checkbox" name="categories" value="other" />-->
-                <!--                <span class="checkbox"></span>-->
-                <!--                <span class="description">inne</span>-->
-                <!--              </label>-->
-                <!--            </div>-->
-
+            <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
+            <!--              <label>-->
+            <!--                <input type="checkbox" name="categories" value="other" />-->
+            <!--                <span class="checkbox"></span>-->
+            <!--                <span class="description">inne</span>-->
+            <!--              </label>-->
+            <!--            </div>-->
 
 
             <!-- STEP 2 -->
@@ -175,11 +174,11 @@
 
             <!-- STEP 3 -->
             <div data-step="3">
-                    <h3>Wybierz organizacje, której chcesz pomóc:</h3>
+                <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
-                    <div id="institution-choice" class="form-group form-group--checkbox">
-                        {% for institution in institutions %}
-                        <label class="institution-choice">
+                <div id="institution-choice" class="form-group form-group--checkbox">
+                    {% for institution in institutions %}
+                    <label class="institution-choice">
                         <input type="radio" name="organization" value={{institution.id}}>
                         <span class="checkbox radio"></span>
                         <span class="description">
@@ -189,18 +188,19 @@
                         <div>Kategorie : {% for category in institution.categories.all %} {{category}} {% endfor %} </div>
 
                         </span>
-                        </label>
-                        {% endfor %}
-                    <div style="display: none"  class="empty-list">Żadna instytucja nie obsługuje wybranych kategorii. Zmień wybór w kroku 1.</div>
+                    </label>
+                    {% endfor %}
+                    <div style="display: none" class="empty-list">Żadna instytucja nie obsługuje wybranych kategorii.
+                        Zmień wybór w kroku 1.
                     </div>
-
-                    <div class="form-group form-group--buttons">
-                        <button id="back-btn-3" type="button" class="btn prev-step">Wstecz</button>
-                        <button id="btn-slide-3" type="button" class="btn next-step">Dalej</button>
-                    </div>
-                    <div id="empty-institution" class="empty-institution">Wybierz instytucję.</div>
                 </div>
 
+                <div class="form-group form-group--buttons">
+                    <button id="back-btn-3" type="button" class="btn prev-step">Wstecz</button>
+                    <button id="btn-slide-3" type="button" class="btn next-step">Dalej</button>
+                </div>
+                <div id="empty-institution" class="empty-institution">Wybierz instytucję.</div>
+            </div>
 
 
             <!--            <div class="form-group form-group&#45;&#45;checkbox">-->
@@ -232,105 +232,105 @@
             <!--            </div>-->
 
 
+            <!-- STEP 4 -->
+            <div data-step="4" id="detail-form">
+                <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
+
+                <div id="pick-up-details" class="form-section form-section--columns">
+                    <div class="form-section--column">
+                        <h4>Adres odbioru</h4>
+                        <div class="form-group form-group--inline details">
+                            <label> Ulica <input id="address" type="text" name="address"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline details">
+                            <label> Miasto <input id="city" type="text" name="city"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Kod pocztowy <input id="postcode" type="text" name="postcode"/>
+                            </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Numer telefonu <input id="phone" type="phone" name="phone"/>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="pick-up-date" class="form-section--column">
+                        <h4>Termin odbioru</h4>
+                        <div class="form-group form-group--inline">
+                            <label> Data <input id="data" type="date" name="data"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label> Godzina <input id="time" type="time" name="time"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Uwagi dla kuriera
+                                <textarea id="more_info" name="more_info" rows="5"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button id="btn-slide-4" type="button" class="btn next-step">Dalej</button>
+                </div>
+                <div id="wrong-data" class="empty-details">Błędny numer telefonu.</div>
+                <div id="wrong-zip-code" class="empty-details">Błędny kod pocztowy.</div>
+                <div id="empty-details" class="empty-details">Wypełnij wszystkie pola lub podane nazwy są zbyt
+                    krótkie.
+                </div>
+                <div id="wrong-date" class="empty-details">Możliwy najbliższy termin to jutro.</div>
+            </div>
 
 
-    <!-- STEP 4 -->
-        <div data-step="4" id="detail-form">
-                    <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
+            <!-- STEP 5 -->
+            <div data-step="5">
+                <h3>Podsumowanie Twojej darowizny</h3>
 
-                    <div id="pick-up-details" class="form-section form-section--columns">
+                <div class="summary">
+                    <div class="form-section">
+                        <h4>Oddajesz:</h4>
+                        <ul>
+                            <li class="bags-summary">
+                                <span class="icon icon-bag"></span>
+                            </li>
+                            <li class="institution-summary">
+                                <span class="icon icon-hand"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="form-section form-section--columns">
                         <div class="form-section--column">
-                            <h4>Adres odbioru</h4>
-                            <div class="form-group form-group--inline details">
-                                <label> Ulica <input id="address" type="text" name="address"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline details">
-                                <label> Miasto <input id="city" type="text" name="city"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label>
-                                    Kod pocztowy <input id="postcode" type="text" name="postcode"/>
-                                </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label>
-                                    Numer telefonu <input id="phone"  type="phone" name="phone"/>
-                                </label>
-                            </div>
+                            <h4>Adres odbioru:</h4>
+                            <ul class="address-list">
+                            </ul>
                         </div>
 
-                        <div id="pick-up-date" class="form-section--column">
-                            <h4>Termin odbioru</h4>
-                            <div class="form-group form-group--inline">
-                                <label> Data <input id="data" type="date" name="data"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label> Godzina <input id="time" type="time" name="time"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label>
-                                    Uwagi dla kuriera
-                                    <textarea id="more_info" name="more_info" rows="5"></textarea>
-                                </label>
-                            </div>
+                        <div class="form-section--column">
+                            <h4>Termin odbioru:</h4>
+                            <ul class="pick-up-date">
+                            </ul>
                         </div>
                     </div>
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn prev-step">Wstecz</button>
-                        <button id="btn-slide-4" type="button" class="btn next-step">Dalej</button>
-                    </div>
-                    <div id="wrong-data" class="empty-details">Błędny numer telefonu.</div>
-                    <div id="wrong-zip-code" class="empty-details">Błędny kod pocztowy.</div>
-                    <div id="empty-details" class="empty-details">Wypełnij wszystkie pola lub podane nazwy są zbyt krótkie.</div>
-                    <div id="wrong-date" class="empty-details">Możliwy najbliższy termin to jutro.</div>
                 </div>
-
-
-    <!-- STEP 5 -->
-    <div data-step="5">
-        <h3>Podsumowanie Twojej darowizny</h3>
-
-        <div class="summary">
-            <div class="form-section">
-                <h4>Oddajesz:</h4>
-                <ul>
-                    <li class="bags-summary">
-                        <span class="icon icon-bag"></span>
-                    </li>
-                    <li class="institution-summary">
-                        <span class="icon icon-hand"></span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="form-section form-section--columns">
-                <div class="form-section--column">
-                    <h4>Adres odbioru:</h4>
-                    <ul class="address-list">
-                    </ul>
+                <div style="display: none">
+                    {{form}}
                 </div>
-
-                <div class="form-section--column">
-                    <h4>Termin odbioru:</h4>
-                    <ul class="pick-up-date">
-                    </ul>
+                <div class="form-group form-group--buttons">
+                    <button id="back-btn-5" type="button" class="btn prev-step">Wstecz</button>
+                    <button type="submit" class="btn">Potwierdzam</button>
                 </div>
             </div>
-        </div>
-        <div style="display: none">
-            {{form}}
-        </div>
-        <div class="form-group form-group--buttons">
-            <button id="back-btn-5" type="button" class="btn prev-step">Wstecz</button>
-            <button type="submit" class="btn">Potwierdzam</button>
-        </div>
-    </div>
-    </form>
+        </form>
     </div>
 </section>
 

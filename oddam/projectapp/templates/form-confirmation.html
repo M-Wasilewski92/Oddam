@@ -7,22 +7,23 @@
         {% include './partials/_login-register.html' %}
 
         <ul>
-          <li><a href="{% url 'projectapp:landingpage' %}" class="btn btn--without-border active">Start</a></li>
-          <li><a href="{% url 'projectapp:landingpage' %}#steps" class="btn btn--without-border">O co chodzi?</a></li>
-          <li><a href="{% url 'projectapp:landingpage' %}#about-us" class="btn btn--without-border">O nas</a></li>
-          <li><a href="{% url 'projectapp:landingpage' %}#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
-          <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
+            <li><a href="{% url 'projectapp:landingpage' %}" class="btn btn--without-border active">Start</a></li>
+            <li><a href="{% url 'projectapp:landingpage' %}#steps" class="btn btn--without-border">O co chodzi?</a></li>
+            <li><a href="{% url 'projectapp:landingpage' %}#about-us" class="btn btn--without-border">O nas</a></li>
+            <li><a href="{% url 'projectapp:landingpage' %}#help" class="btn btn--without-border">Fundacje i
+                organizacje</a></li>
+            <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
-      </nav>
+    </nav>
 
-      <div class="slogan container container--90">
-          <h2>
+    <div class="slogan container container--90">
+        <h2>
             Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
             informacje o odbiorze.
-          </h2>
-      </div>
-    </header>
+        </h2>
+    </div>
+</header>
 
-    {% include './partials/_footer.html' %}
+{% include './partials/_footer.html' %}
 
-  {% endblock %}
+{% endblock %}
