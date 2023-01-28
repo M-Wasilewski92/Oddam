@@ -80,3 +80,9 @@ class LastNameChangeForm(forms.Form):
     last_name = forms.CharField(label='Nazwisko', min_length=3, max_length=150,
                                 widget=forms.TextInput(attrs={'class': 'form-group',
                                                               'placeholder': 'Nazwisko'}))
+
+
+class ContactForm(forms.Form):
+    first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Imię'}))
+    last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Nazwisko'}))
+    message = forms.CharField(widget=forms.Textarea, max_length=2000)
