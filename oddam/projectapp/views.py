@@ -118,7 +118,7 @@ class Login(View):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(f"Zostałeś zalogowany jako {email}.")
+                messages.success(request, f"Zostałeś zalogowany jako {email}.")
                 messages.info(request, f"Zostałeś zalogowany jako {email}.")
                 return redirect('projectapp:landingpage')
             else:
