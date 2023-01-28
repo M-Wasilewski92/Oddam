@@ -17,9 +17,10 @@
         {% for field in form %}
         <div class="form-group">
             {{field}}
+            {{field.help_text}}
         </div>
         {% endfor %}
-
+        {% include './partials/_register-message.html' %}
         <div class="form-group form-group--buttons">
             <a href="{% url 'projectapp:login' %}" class="btn btn--without-border">Zaloguj się</a>
             <button class="btn" type="submit">Załóż konto</button>
