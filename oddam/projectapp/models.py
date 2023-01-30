@@ -16,6 +16,7 @@ def delete_user(sender, instance, **kwargs):
         if superusers == 1:
             raise PermissionDenied
 
+
 class Category(models.Model):
     """
      Category name are represented by this model.
