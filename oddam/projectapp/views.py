@@ -118,6 +118,7 @@ class Login(View):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
+                messages.success(f"Zostałeś zalogowany jako {email}.")
                 messages.info(request, f"Zostałeś zalogowany jako {email}.")
                 return redirect('projectapp:landingpage')
             else:
@@ -157,8 +158,11 @@ class Register(View):
                 mail_subject, message, to=[to_email]
             )
             email.send()
+            messages.success('Rejestracja pomyślna')
             return redirect('projectapp:login')
         else:
+            messages.error(request, 'Błąd w formularzu')
+            messages.error(request, form.errors)
             return redirect('projectapp:register')
 
 
