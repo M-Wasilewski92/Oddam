@@ -258,6 +258,7 @@ class UserSettings(PasswordChangeView):
     def post(self, request, *args, **kwargs):
         send_contact_mail(request)
         first_name_form = FirstNameChangeForm(self.request.POST)
+        last_name_form = LastNameChangeForm(self.request.POST)
         if first_name_form.is_valid():
             if User.objects.get(id=self.request.POST['user_id']):
                 user_new_name = User.objects.get(id=self.request.POST['user_id'])
