@@ -65,6 +65,7 @@ class LandingPage(View):
 
     def post(self, request):
         send_contact_mail(request)
+        print(request.POST)
         return redirect('projectapp:landingpage')
 
 
