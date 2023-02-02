@@ -37,17 +37,17 @@ class LandingPage(View):
 
         all_institutions = models.Institution.objects.all()
         # Institution by Foundations whit pagination
-        foundations = models.Institution.objects.filter(type='Fundacja')
+        foundations = models.Institution.objects.filter(type='Fundacja').order_by('id')
         paginate_foundations = Paginator(foundations, 5)
         page_for_foundations = request.GET.get('slide1')
         foundation_page = paginate_foundations.get_page(page_for_foundations)
         # Institution by No gov organizations whit pagination
-        non_gov_organizations = models.Institution.objects.filter(type='Organizacja Pozarządowa')
+        non_gov_organizations = models.Institution.objects.filter(type='Organizacja Pozarządowa').order_by('id')
         paginate_no_gov = Paginator(non_gov_organizations, 5)
         page_for_no_gov = request.GET.get('slide2')
         no_gov_page = paginate_no_gov.get_page(page_for_no_gov)
         # Institution by local collections whit pagination
-        local_collections = models.Institution.objects.filter(type='Zbiórka Lokalna')
+        local_collections = models.Institution.objects.filter(type='Zbiórka Lokalna').order_by('id')
         paginate_collections = Paginator(local_collections, 5)
         page_for_collections = request.GET.get('slide3')
         collections_page = paginate_collections.get_page(page_for_collections)
