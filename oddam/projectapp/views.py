@@ -65,7 +65,6 @@ class LandingPage(View):
 
     def post(self, request):
         send_contact_mail(request)
-        print(request.POST)
         return redirect('projectapp:landingpage')
 
 
@@ -125,7 +124,6 @@ class Login(View):
     def post(self, request):
         send_contact_mail(request)
         form = CustomLoginForm(request, data=request.POST)
-        contact_form = ContactForm()
         if form.is_valid():
             email = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -158,7 +156,6 @@ class Register(View):
     def post(self, request):
         send_contact_mail(request)
         form = CustomUserCreationForm(request.POST)
-        contact_form = ContactForm()
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
@@ -168,7 +165,7 @@ class Register(View):
             message = render_to_string('email/acc_activate_email.html', {
                 'user': user,
                 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'uid': urlsafe_base64_encode(force_bytes(user.id)),
                 'token': account_activation_token.make_token(user),
             })
             to_email = form.cleaned_data['email']
@@ -176,7 +173,7 @@ class Register(View):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            messages.success('Rejestracja pomyślna')
+            messages.success(request, message='Rejestracja pomyślna')
             return redirect('projectapp:login')
         else:
             messages.error(request, 'Błąd w formularzu')
@@ -186,8 +183,6 @@ class Register(View):
 
 def activate(request, uidb64, token):
     """This function will check token, if it is valid then user will be active."""
-    send_contact_mail(request)
-    contact_form = ContactForm()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(id=uid)
@@ -198,12 +193,12 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
 
-        messages.success(request, "Dziękuję za potwierdznie adresu Email. Teraz możesz się zalogować.")
+        messages.success(request, message="Dziękuję za potwierdzenie adresu Email. Teraz możesz się zalogować.")
         return redirect('projectapp:login')
     else:
         messages.error(request, "Link Aktywacyjny jest niepoprawny")
 
-    return redirect('projectapp:landingpage', context={'contact_form': contact_form})
+    return redirect('projectapp:landingpage')
 
 
 class SuccessDonation(View):
@@ -345,6 +340,7 @@ def send_contact_mail(request):
 
         try:
             for admin in admins:
+                # Currently sends mail to same email
                 send_mail(subject, message, os.environ.get('EMAIL_HOST_USER'), [os.environ.get('EMAIL_HOST_USER')])  #[f'{admin.email}'])
         except BadHeaderError:
             return HttpResponse("Zły Header? ")
