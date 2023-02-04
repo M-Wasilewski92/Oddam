@@ -37,17 +37,17 @@ class LandingPage(View):
 
         all_institutions = models.Institution.objects.all()
         # Institution by Foundations whit pagination
-        foundations = models.Institution.objects.filter(type='Fundacja')
+        foundations = models.Institution.objects.filter(type='Fundacja').order_by('id')
         paginate_foundations = Paginator(foundations, 5)
         page_for_foundations = request.GET.get('slide1')
         foundation_page = paginate_foundations.get_page(page_for_foundations)
         # Institution by No gov organizations whit pagination
-        non_gov_organizations = models.Institution.objects.filter(type='Organizacja Pozarządowa')
+        non_gov_organizations = models.Institution.objects.filter(type='Organizacja Pozarządowa').order_by('id')
         paginate_no_gov = Paginator(non_gov_organizations, 5)
         page_for_no_gov = request.GET.get('slide2')
         no_gov_page = paginate_no_gov.get_page(page_for_no_gov)
         # Institution by local collections whit pagination
-        local_collections = models.Institution.objects.filter(type='Zbiórka Lokalna')
+        local_collections = models.Institution.objects.filter(type='Zbiórka Lokalna').order_by('id')
         paginate_collections = Paginator(local_collections, 5)
         page_for_collections = request.GET.get('slide3')
         collections_page = paginate_collections.get_page(page_for_collections)
@@ -124,7 +124,6 @@ class Login(View):
     def post(self, request):
         send_contact_mail(request)
         form = CustomLoginForm(request, data=request.POST)
-        contact_form = ContactForm()
         if form.is_valid():
             email = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -157,7 +156,6 @@ class Register(View):
     def post(self, request):
         send_contact_mail(request)
         form = CustomUserCreationForm(request.POST)
-        contact_form = ContactForm()
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
@@ -167,7 +165,7 @@ class Register(View):
             message = render_to_string('email/acc_activate_email.html', {
                 'user': user,
                 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'uid': urlsafe_base64_encode(force_bytes(user.id)),
                 'token': account_activation_token.make_token(user),
             })
             to_email = form.cleaned_data['email']
@@ -175,7 +173,7 @@ class Register(View):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            messages.success('Rejestracja pomyślna')
+            messages.success(request, message='Rejestracja pomyślna')
             return redirect('projectapp:login')
         else:
             messages.error(request, 'Błąd w formularzu')
@@ -183,26 +181,26 @@ class Register(View):
             return redirect('projectapp:register')
 
 
-def activate(request, uidb64, token):
-    """This function will check token, if it is valid then user will be active."""
-    send_contact_mail(request)
-    contact_form = ContactForm()
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(id=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+class Activate(View):
 
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
+    def get(self, request, uidb64, token):
+        """This function will check token, if it is valid then user will be active."""
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
 
-        messages.success(request, "Dziękuję za potwierdznie adresu Email. Teraz możesz się zalogować.")
-        return redirect('projectapp:login')
-    else:
-        messages.error(request, "Link Aktywacyjny jest niepoprawny")
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
 
-    return redirect('projectapp:landingpage', context={'contact_form': contact_form})
+            messages.success(request, message="Dziękuję za potwierdzenie adresu Email. Teraz możesz się zalogować.")
+            return redirect('projectapp:login')
+
+        else:
+            messages.error(request, "Link Aktywacyjny jest niepoprawny")
+            return redirect('projectapp:landingpage')
 
 
 class SuccessDonation(View):
@@ -227,7 +225,6 @@ class UserProfile(LoginRequiredMixin, View):
 
     def post(self, request):
         send_contact_mail(request)
-        contact_form = ContactForm()
         today = date.today()
         time_now = datetime.now()
         time_now = time_now.strftime("%H:%M")
@@ -239,8 +236,8 @@ class UserProfile(LoginRequiredMixin, View):
                 donation.pick_up_date = today
                 donation.pick_up_time = time_now
                 donation.save()
-                return redirect('projectapp:profile', context={'contact_form': contact_form})
-        return render(request, './user-page.html', context={'contact_form': contact_form})
+                return redirect('projectapp:profile')
+        return redirect('projectapp:profile')
 
 
 class UserSettings(PasswordChangeView):
@@ -254,6 +251,7 @@ class UserSettings(PasswordChangeView):
         'last_name_form': last_name_form,
         'contact_form': contact_form,
     }
+
     # To Do Fix Forms
     def post(self, request, *args, **kwargs):
         send_contact_mail(request)
@@ -344,7 +342,9 @@ def send_contact_mail(request):
 
         try:
             for admin in admins:
-                send_mail(subject, message, os.environ.get('EMAIL_HOST_USER'), [os.environ.get('EMAIL_HOST_USER')])  #[f'{admin.email}'])
+                # Currently sends mail to same email
+                send_mail(subject, message, os.environ.get('EMAIL_HOST_USER'),
+                          [os.environ.get('EMAIL_HOST_USER')])  # [f'{admin.email}'])
         except BadHeaderError:
             return HttpResponse("Zły Header? ")
         return redirect('projectapp:landingpage')
