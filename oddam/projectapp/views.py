@@ -181,24 +181,26 @@ class Register(View):
             return redirect('projectapp:register')
 
 
-def activate(request, uidb64, token):
-    """This function will check token, if it is valid then user will be active."""
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(id=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+class Activate(View):
 
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
+    def get(self, request, uidb64, token):
+        """This function will check token, if it is valid then user will be active."""
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
 
-        messages.success(request, message="Dziękuję za potwierdzenie adresu Email. Teraz możesz się zalogować.")
-        return redirect('projectapp:login')
-    else:
-        messages.error(request, "Link Aktywacyjny jest niepoprawny")
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
 
-    return redirect('projectapp:landingpage')
+            messages.success(request, message="Dziękuję za potwierdzenie adresu Email. Teraz możesz się zalogować.")
+            return redirect('projectapp:login')
+
+        else:
+            messages.error(request, "Link Aktywacyjny jest niepoprawny")
+            return redirect('projectapp:landingpage')
 
 
 class SuccessDonation(View):
@@ -223,7 +225,6 @@ class UserProfile(LoginRequiredMixin, View):
 
     def post(self, request):
         send_contact_mail(request)
-        contact_form = ContactForm()
         today = date.today()
         time_now = datetime.now()
         time_now = time_now.strftime("%H:%M")
@@ -235,8 +236,8 @@ class UserProfile(LoginRequiredMixin, View):
                 donation.pick_up_date = today
                 donation.pick_up_time = time_now
                 donation.save()
-                return redirect('projectapp:profile', context={'contact_form': contact_form})
-        return render(request, './user-page.html', context={'contact_form': contact_form})
+                return redirect('projectapp:profile')
+        return redirect('projectapp:profile')
 
 
 class UserSettings(PasswordChangeView):
@@ -250,6 +251,7 @@ class UserSettings(PasswordChangeView):
         'last_name_form': last_name_form,
         'contact_form': contact_form,
     }
+
     # To Do Fix Forms
     def post(self, request, *args, **kwargs):
         send_contact_mail(request)
@@ -341,7 +343,8 @@ def send_contact_mail(request):
         try:
             for admin in admins:
                 # Currently sends mail to same email
-                send_mail(subject, message, os.environ.get('EMAIL_HOST_USER'), [os.environ.get('EMAIL_HOST_USER')])  #[f'{admin.email}'])
+                send_mail(subject, message, os.environ.get('EMAIL_HOST_USER'),
+                          [os.environ.get('EMAIL_HOST_USER')])  # [f'{admin.email}'])
         except BadHeaderError:
             return HttpResponse("Zły Header? ")
         return redirect('projectapp:landingpage')

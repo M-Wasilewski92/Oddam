@@ -9,7 +9,8 @@ from pytest_django.asserts import assertTemplateUsed
 
 from projectapp.models import Donation
 
-from projectapp.forms import ContactForm, DonationCreationForm, CustomLoginForm, CustomUserCreationForm
+from projectapp.forms import ContactForm, DonationCreationForm, CustomLoginForm, CustomUserCreationForm, IsTakenForm, \
+    FirstNameChangeForm, LastNameChangeForm
 
 from projectapp.tokens import account_activation_token
 
@@ -118,6 +119,8 @@ def test_add_donation_mail_post_valid_contact(client, mailoutbox, example_user, 
 
 @pytest.mark.django_db
 def test_add_donation_post_form_valid(client, example_user, example_institution, example_category):
+    donations = Donation.objects.all()
+    assert len(donations) == 0
     url = reverse('projectapp:add')
     client.force_login(example_user)
     data = {'quantity': 5, 'address': 'Test adres', 'phone_number': '123123123', 'city': 'Testowo',
@@ -283,7 +286,7 @@ def test_user_activation_not_valid(client, inactive_user):
     assert not inactive_user.is_active
 
 
-""" SuccessDonation Tests """
+""" SuccessDonation tests """
 
 
 def test_success_donation(client):
@@ -294,3 +297,133 @@ def test_success_donation(client):
     assert isinstance(contact_form_in_view, ContactForm)
     assertTemplateUsed(response, './form-confirmation.html')
     assert '<li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>' in response.content.decode('UTF-8')
+
+
+""" User Profile tests """
+
+
+@pytest.mark.django_db
+def test_user_profile_get(client, example_user, example_donation):
+    url = reverse('projectapp:profile')
+    client.force_login(example_user)
+    response = client.get(url)
+    contact_form_in_view = response.context['contact_form']
+    form_in_view = response.context['form']
+    assert response.status_code == 200
+    assert isinstance(form_in_view, IsTakenForm)
+    assert isinstance(contact_form_in_view, ContactForm)
+    assertTemplateUsed(response, './user-page.html')
+    assert '<p>Dotacja nie odebrana:</p>' in response.content.decode('UTF-8')
+
+
+@pytest.mark.django_db
+def test_userprofile_get_not_logged_in(client, example_user):
+    url = reverse('projectapp:profile')
+    response = client.get(url)
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('projectapp:landingpage'))
+
+
+@pytest.mark.django_db()
+def test_user_profile_post(client, example_user, example_donation):
+    assert not example_donation.is_taken
+    assert len(Donation.objects.filter(is_taken=True)) == 0
+    url = reverse('projectapp:profile')
+    client.force_login(example_user)
+    data = {'is_taken': True, 'don_id': example_donation.id}
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert len(Donation.objects.filter(is_taken=True)) == 1
+    assert response.url.startswith(reverse('projectapp:profile'))
+
+
+@pytest.mark.django_db
+def test_user_profile_post_no_form(client, example_user, example_donation):
+    url = reverse('projectapp:profile')
+    client.force_login(example_user)
+    data = {'don_id': example_donation.id}
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('projectapp:profile'))
+
+
+@pytest.mark.django_db
+def test_user_profile_post_no_donation_id(client, example_user, example_donation):
+    url = reverse('projectapp:profile')
+    client.force_login(example_user)
+    data = {'is_taken': True}
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('projectapp:profile'))
+
+
+"""Testing User Settings"""
+
+
+@pytest.mark.django_db
+def test_user_settings_get(client, example_user):
+    url = reverse('projectapp:settings')
+    client.force_login(example_user)
+    response = client.get(url)
+    contact_form_in_view = response.context['contact_form']
+    first_name_form_in_view = response.context['first_name_form']
+    last_name_form_in_view = response.context['last_name_form']
+    assert response.status_code == 200
+    assert isinstance(first_name_form_in_view, FirstNameChangeForm)
+    assert isinstance(last_name_form_in_view, LastNameChangeForm)
+    assert isinstance(contact_form_in_view, ContactForm)
+    assertTemplateUsed(response, './user-settings.html')
+    assert f'<h3> Imię: {example_user.first_name}</h3>' in response.content.decode('UTF-8')
+
+
+@pytest.mark.django_db
+def test_user_settings_get_not_logged_in(client):
+    url = reverse('projectapp:settings')
+    response = client.get(url)
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('projectapp:login'))
+
+
+@pytest.mark.django_db
+def test_user_settings_post_change_first_name(client, example_user):
+    url = reverse('projectapp:settings')
+    client.force_login(example_user)
+    data = {'first_name': 'Imię testowe', 'user_id': example_user.pk}
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assertTemplateUsed(response, './user-settings.html')
+
+
+@pytest.mark.django_db
+def test_user_settings_post_change_last_name(client, example_user, ):
+    url = reverse('projectapp:settings')
+    client.force_login(example_user)
+    data = {'last_name': 'Nazwisko Testowe', 'user_id': example_user.pk}
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assertTemplateUsed(response, './user-settings.html')
+
+
+"""Password Reset Tests"""
+
+
+@pytest.mark.django_db
+def test_user_settings_post_change_password(client, example_user, mailoutbox):
+    url = reverse('projectapp:password_reset')
+    client.force_login(example_user)
+    data = {'email': 'test@test.pl'}
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert len(mailoutbox) == 1
+    assert mailoutbox[0].subject == 'Prośba o Reset hasła'
+    assert 'Link jednorazowego użytku.' in mail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_user_settings_post_change_password_invalid_email(client, example_user, mailoutbox):
+    url = reverse('projectapp:password_reset')
+    client.force_login(example_user)
+    data = {'email': 'wrong@test.pl'}
+    response = client.post(url, data)
+    assert response.status_code == 200
+    assertTemplateUsed(response, 'password_reset_no_user.html')
