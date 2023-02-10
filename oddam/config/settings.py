@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('DJ_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DJ_DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -86,7 +86,7 @@ DATABASES = {'default': {}}
 DATABASE_URL = os.environ.get('DATABASE_URL')
 db_from_env = dj_database_url.config(
     default=DATABASE_URL, conn_max_age=500, ssl_require=False
-)
+)  # change to TRUE before deployment
 
 DATABASES['default'].update(db_from_env)
 
