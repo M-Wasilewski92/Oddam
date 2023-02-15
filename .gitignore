@@ -3,6 +3,5 @@
 venv
 **/*.pyc
 oddam_w_dobre_rece
-oddam/projectapp/migrations
 oddam/env/.env
 oddam/.pytest_cache/*
