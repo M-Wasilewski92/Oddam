@@ -29,7 +29,8 @@ https://github.com/M-Wasilewski92/Oddam-w-dobre-rece.git
 Set up environmental variables in .env file located in project root.
 
 DJ_SECRET_KEY= "Secret Key" 
-You can generete Django secret or get one frome thi website: https://djecrety.ir/
+
+You can generete Django secret key here https://djecrety.ir/
 
 DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
 Use this path 
@@ -53,3 +54,4 @@ username='Test@user.com',
 email='Test@user.com',
 password='StrongUserPassword1!'
 ```
+
