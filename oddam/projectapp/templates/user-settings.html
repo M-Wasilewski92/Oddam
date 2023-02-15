@@ -1,0 +1,47 @@
+{% extends 'base.html' %},
+{% load static %}
+{% block title %}Ustawienia{% endblock %}
+{% block container %}
+<header class="header--form-page" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <nav class="container container--70">
+        {% include './partials/_login-register.html' %}
+        {% include './partials/_header.html' %}
+    </nav>
+
+    <section class="about-us">
+        <div class="form-section form-section--columns">
+            <form method="post"> {% csrf_token %}
+                <div class="form-section--column">
+                    <h3> Imię: {{ user.first_name }}</h3>
+                    {{ first_name_form }}
+                    <button class="btn btn--highlighted" type="submit" name="user_id" value="{{ user.pk }}"> Zmień
+                        Imię
+                    </button>
+                </div>
+            </form>
+            <form method="post"> {% csrf_token %}
+                <div class="form-section--column">
+                    <h3> Nazwisko: {{ user.last_name }}</h3>
+                    {{ last_name_form }}
+                    <button class="btn btn--highlighted" type="submit" name="user_id" value="{{ user.pk }}"> Zmień
+                        Nazwisko
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="form-section form-section--columns">
+            <form method="post"> {% csrf_token %}
+                <div class="form-section--column">
+                    {{ form }}
+                    <button class="btn btn--highlighted" type="submit" name="success" value="1"> Zmień hasło</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</header>
+
+
+
+
+{% endblock %}

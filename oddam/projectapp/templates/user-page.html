@@ -1,0 +1,71 @@
+{% extends 'base.html' %},
+{% load static %}
+{% block title %}Profil{% endblock %}
+{% block container %}
+<header class="header--form-page" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <nav class="container container--70">
+        {% include './partials/_login-register.html' %}
+        {% include './partials/_header.html' %}
+    </nav>
+    <section class="slogan container container--90">
+        <div class=slogan--item">
+            <h2>Profil Użytkownika:<br> {{ user.get_full_name }}</h2>
+            <h1>Imię: {{ user.first_name }} </h1>
+            <h1>Nazwisko: {{ user.last_name }} </h1>
+            <h1>Adres E-mail: {{ user.email }}</h1>
+        </div>
+    </section>
+
+</header>
+
+<section class="about-us">
+    <div class="about-us--text">
+        <h2> Lista Dotacji oczekujących na odbiór: </h2>
+        {% for donation in user_donations %}
+        {% if donation.is_taken == False %}
+        <div style="border-style: solid;" class="about-us--text">
+            <p>Ilość przekazanych darów:<br>{{ donation.quantity }}
+                <br>Wsparta Organizacja:<br>{{ donation.institution }}
+                <br>Kategorie Daru:<br>{{ donation.categories.all|join:', ' }}
+            </p>
+
+            <p>Dotacja nie odebrana:</p>
+            <p>Planowana data odbioru:<br>
+                <br>{{ donation.pick_up_date }}
+                <br>O Godzinie: {{ donation.pick_up_time }}
+            </p>
+            <form method="post"> {% csrf_token %}
+                <p style="display: none">{{form}}</p>
+                <button type="submit" name="don_id" value="{{ donation.pk }}"> Dotacja przekazana</button>
+            </form>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="about-us--text">
+        <h2> Zarchiwizowane Dotacje</h2>
+
+        {% for donation in user_donations %}
+        {% if donation.is_taken %}
+        <div style="border-style: solid; color: orange" class="about-us--text">
+            <p>Ilość przekazanych darów:<br>{{ donation.quantity }}
+                <br>Wsparta Organizacja:<br>{{ donation.institution }}
+                <br>Kategorie Daru:<br>{{ donation.categories.all|join:', ' }}
+
+
+            <p>Dotacja odebrana:</p>
+            <p>Dnia: {{ donation.pick_up_date }}<br>
+                O godzinie: {{donation.pick_up_time }}</p>
+            <form method="post"> {% csrf_token %}
+                <p>{{form}}</p>
+                <button type="submit" name="don_id" value="{{ donation.pk }}"> Dotacja przekazana</button>
+            </form>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</section>
+
+
+{% endblock %}
