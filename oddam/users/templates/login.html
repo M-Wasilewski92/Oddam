@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Rejestracja{% endblock %}
+{% load static %}
+{% block title %}Logowanie{% endblock %}
 {% block container %}
 
 <header>
@@ -9,26 +10,26 @@
 
     </nav>
 </header>
-
 <section class="login-page">
-    <h2>Załóż konto</h2>
+    <h2>Zaloguj się</h2>
     <form method="POST">
         {% csrf_token %}
-        {% for field in form %}
+
+        {% for field in login_form %}
         <div class="form-group">
             {{field}}
-            {{field.help_text}}
+            {% if field.name == 'password' %}
+            <a href="{% url 'users:password_reset' %}" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
+            {% endif %}
         </div>
         {% endfor %}
-        {% include './partials/_register-message.html' %}
+
         <div class="form-group form-group--buttons">
-            <a href="{% url 'projectapp:login' %}" class="btn btn--without-border">Zaloguj się</a>
-            <button class="btn" type="submit">Załóż konto</button>
+            <a href="{% url 'users:register' %}" class="btn btn--without-border">Załóż konto</a>
+            <button class="btn" type="submit">Zaloguj się</button>
         </div>
     </form>
 </section>
 
 
-
 {% endblock %}
-

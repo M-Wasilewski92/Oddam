@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Zapomniane hasło{% endblock %}
+{% block title %}Rejestracja{% endblock %}
 {% block container %}
 
 <header>
@@ -11,19 +11,23 @@
 </header>
 
 <section class="login-page">
-    <h2>Zapomniałeś hasła? </h2>
-    <h4> Podaj swój adres poniżej a wyślemy email z instrukcjami. </h4>
+    <h2>Załóż konto</h2>
     <form method="POST">
         {% csrf_token %}
+        {% for field in form %}
         <div class="form-group">
-            {{form}}
+            {{field}}
+            {{field.help_text}}
         </div>
+        {% endfor %}
+        {% include './partials/_register-message.html' %}
         <div class="form-group form-group--buttons">
-            <button class="btn" type="submit">Wyślij Email</button>
+            <a href="{% url 'users:login' %}" class="btn btn--without-border">Zaloguj się</a>
+            <button class="btn" type="submit">Załóż konto</button>
         </div>
     </form>
 </section>
 
 
-{% endblock %}
 
+{% endblock %}

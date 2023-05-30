@@ -4,11 +4,11 @@
          Witaj {{user.first_name}}
         <ul class="dropdown">
           <li><a href="{% url 'projectapp:profile' %}">Profil</a></li>
-          <li><a href="{% url 'projectapp:settings' %}">Ustawienia</a></li>
+          <li><a href="{% url 'users:settings' %}">Ustawienia</a></li>
             {% if user.is_superuser %}
             <li><a href="/admin">Panel Administracyjny</a></li>
             {% endif %}
-          <li><a href="{% url 'logout' %}">Wyloguj</a></li>
+          <li><a href="{% url 'users:logout' %}">Wyloguj</a></li>
 
         </ul>
 
@@ -17,7 +17,7 @@
     </ul>
     {% else %}
           <ul class="nav--actions">
-          <li><a href="{% url 'projectapp:login' %}">Zaloguj</a></li>
-          <li class="highlighted"><a href="{% url 'projectapp:register' %}">Załóż konto</a></li>
+          <li><a href="{% url 'users:login' %}">Zaloguj</a></li>
+          <li class="highlighted"><a href="{% url 'users:register' %}">Załóż konto</a></li>
         </ul>
          {% endif %}
